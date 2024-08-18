@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOVE IS EVERYWHERE</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <style>
+        body {
+            text-align: center;
+            height: 88vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 100px auto;
+            width: 300px;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            font-size: 24px;
+            width: fit-content;
+            margin-left: 30%;
+        }
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        input[type="text"] {
+            width: 45%;
+            padding: 10px;
+            margin: 5px;
+            transition: background-color 5s ease-in-out;
+        }
+        input[type="submit"] {
+            margin: 5px 0;
+            padding: 10px 20px;
+            transition: background-color 5s ease-in-out;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #mouse-img {
+            display: none;
+            position: absolute;
+            scale: 0.5;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 5s ease-in-out;
+            z-index: 1;
+        }
+        .deleting-text {
+            position: absolute;
+            bottom: 10px;
+            right: 3px;
+            font-size: 24px;
+            color: black;
+            background: yellow;
+            opacity: 0;
+            z-index: 0;
+            transition: opacity 0s ease-in-out;
+        }
+        .ascii-art {
+            font-family: monospace;
+            color: white;
+            position: absolute;
+        }
+        #art1 { top: 100px; right: 200px; }
+        #art2 { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        #art3 { top: 70px; left: 70px; }
+        #art4 { top: 200px; right: 50px; transform: scale(0.7); }
+        #art5 { top: 180px; left: 50px; transform: scale(0.9, 1.2); }
+        .text-animation {
+            color: black;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="h1">Love Meter</h1>
+        <div class="input-container">
+            <input id="your_name" type="text" name="your_name" placeholder="Your Name">
+            <input id="lover_name" type="text" name="lover_name" placeholder="Your Lover's Name">
+        </div>
+        <input type="submit" value="Submit" id="submit-button">
+    </div>
+
+    <div id="art1" class="ascii-art"><pre>|\      _,,,---,,_
+ZZZzz /,`.-'`'    -.  ;-;;,_
+     |,4-  ) )-,_. ,\ (  `'-'
+    '---''(_/--'  `-'\_) </pre></div>
+
+    <div id="art2" class="ascii-art"><pre>@@@@       (_)@(_)   vVVVv     _     @@@@  (___) _(_)_  @@@@  (___) _(_)_
+@@()@@ wWWWw  (_)\    (___)   _(_)_  @@()@@   Y  (_)@(_)  @@()@@   Y  (_)@(_)
+@@@@  (___)     `|/    Y    (_)@(_)  @@@@   \|/   (_)\  @@@@   \|/   (_)\
+ /      Y       \|    \|/    /(_)    \|      |/      |    \|      |/      |
+\ |     \ |/       | / \ | /  \|/       |/    \|      \|/       |/    \|      \|/
+ \\|//   \\|///  \\\|//\\\|/// \|///  \\\|//  \\|//  \\\|//  \\\|//  \\|//  \\\|//</pre></div>
+
+    <div id="art3" class="ascii-art"><pre>    _  _
+    ( \/ )
+     .---.   \  /   .-"-. 
+    /   6_6   \/   / 4 4 \
+    \_  (__\       \_ v _/
+    //   \\        //   \\
+   ((     ))      ((     ))
+jgs=====""===""========""===""=======
+      |||            |||
+       |              |</pre></div>
+
+    <div id="art4" class="ascii-art"><pre>            '
+            *          .
+                   *       '
+              *                *
+    *   '*
+           *
+                *
+                       *
+               *
+                     *
+         .                      .
+         .                      ;
+         :                  - --+- -
+         !           .          !
+         |        .             .
+         |_         +
+      ,  | `.
+    --- --+-<#>-+- ---  --  -
+      `._|_,'
+         T
+         |
+         !
+         :         . : 
+         .       *</pre></div>
+
+    <div id="art5" class="ascii-art"><pre>            * *    
+            *    *  *
+       *  *    *     *  *
+      *     *    *  *    *
+  * *   *    *    *    *   *
+  *     *  *    * * .#  *   *
+  *   *     * #.  .# *   *
+   *     "#.  #: #" * *    *
+  *   * * "#. ##"       *
+    *       "###
+              "##
+               ##.
+               .##:
+               :###
+               ;###
+             ,####.</pre></div>
+
+    <img id="mouse-img" src="mouse.png" alt="Mouse" width="50">
+
+    <script>
+        let audio;
+
+        function playSound(url, loop = false) {
+            stopSound();
+            audio = new Audio(url);
+            audio.loop = loop;
+            audio.play().catch(error => console.error('Error playing audio:', error));
+        }
+
+        function stopSound() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+
+        function animateElement(selector, style, value, delay) {
+            setTimeout(() => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.style[style] = value;
+                    playSound("click.wav");
+                }
+            }, delay);
+        }
+
+        function animateText(initialText, finalText) {
+            const textContainer = document.createElement("div");
+            textContainer.classList.add("text-animation");
+            document.body.appendChild(textContainer);
+
+            let isDeleting = false;
+            let text = "";
+            let typingSpeed = 100;
+
+            function updateText() {
+                textContainer.innerText = text;
+
+                if (isDeleting) {
+                    if (text === "") {
+                        isDeleting = false;
+                        initialText = finalText;
+                        setTimeout(updateText, 500);
+                    } else {
+                        text = text.slice(0, -1);
+                        setTimeout(updateText, 10);
+                    }
+                } else {
+                    if (text === initialText) {
+                        if (initialText !== finalText) {
+                            isDeleting = true;
+                            setTimeout(updateText, 1500);
+                        }
+                    } else {
+                        text = initialText.slice(0, text.length + 1);
+                        setTimeout(updateText, typingSpeed);
+                    }
+                }
+
+                if (text.length === 1 || text.length === initialText.length) {
+                    playSound("typing.mp3");
+                }
+            }
+
+            updateText();
+        }
+
+        document.getElementById("submit-button").addEventListener("click", function() {
+            document.documentElement.style.cursor = "none";
+            this.style.pointerEvents = "none";
+            document.getElementById("your_name").style.pointerEvents = "none";
+            document.getElementById("lover_name").style.pointerEvents = "none";
+
+            const deletingText = document.createElement("div");
+            deletingText.innerText = "delete?";
+            deletingText.classList.add("deleting-text");
+            document.body.appendChild(deletingText);
+
+            const mouseImg = document.getElementById("mouse-img");
+            mouseImg.style.display = "block";
+
+            setTimeout(() => {
+                mouseImg.style.top = "0";
+                mouseImg.style.left = "0";
+            }, 100);
+
+            setTimeout(() => {
+                mouseImg.style.top = "calc(100vh - 50px)";
+                mouseImg.style.left = "calc(100vw - 50px)";
+            }, 5200);
+
+            animateElement("body", "border", "3px solid blue", 5200);
+            animateElement("#your_name", "border", "3px solid blue", 7610);
+            animateElement("#art1", "color", "blue", 7000);
+            animateElement("#art5", "color", "blue", 7100);
+            animateElement("#art3", "color", "blue", 7800);
+            animateElement("#art4", "color", "blue", 8300);
+            animateElement("#art2", "color", "blue", 8900);
+            animateElement("#h1", "border", "3px solid blue", 7720);
+            animateElement("#lover_name", "border", "3px solid blue", 7850);
+            animateElement("#submit-button", "border", "3px solid blue", 7720);
+
+            setTimeout(() => {
+                document.body.style.border = "3px solid white";
+                document.body.innerHTML = "";
+                deletingText.style.opacity = 0;
+                playSound("click.wav");
+            }, 11900);
+
+            setTimeout(() => {
+                deletingText.style.opacity = 1;
+                playSound("click.wav");
+            }, 10000);
+
+            setTimeout(() => {
+                animateText(
+                    "what the hell are you doing?! why do you need to check that?!!",
+                    "what you are looking to measure with this meter already exists inside of you."
+                );
+            }, 12800);
+        });
+    </script>
+</body>
+</html>
