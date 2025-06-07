@@ -407,18 +407,16 @@ jgs=====""===""========""===""=======
           }, 12800);
         });
     </script>
-  </body>
-  <audio id="clickAudio" src="click.wav"></audio>
-</html>
-<audio id="myAudio" src="your-voice-file.mp3" controls autoplay></audio>
+    <audio id="clickAudio" src="click.wav"></audio>
 <script>
 window.addEventListener('DOMContentLoaded', function() {
     document.body.addEventListener('click', function() {
         var audio = document.getElementById('clickAudio');
         audio.play();
-    }, { once: true }); // Only plays the first time you click
+    }, { once: true });
 });
 </script>
+</body>
 <script>
   const audio = document.getElementById('myAudio');
   audio.volume = 1.0; // Set to maximum volume
