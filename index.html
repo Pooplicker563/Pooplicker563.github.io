@@ -408,8 +408,17 @@ jgs=====""===""========""===""=======
         });
     </script>
   </body>
+  <audio id="clickAudio" src="click.wav"></audio>
 </html>
 <audio id="myAudio" src="your-voice-file.mp3" controls autoplay></audio>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function() {
+        var audio = document.getElementById('clickAudio');
+        audio.play();
+    }, { once: true }); // Only plays the first time you click
+});
+</script>
 <script>
   const audio = document.getElementById('myAudio');
   audio.volume = 1.0; // Set to maximum volume
